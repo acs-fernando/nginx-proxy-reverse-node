@@ -6,6 +6,7 @@ services:
     build: 
       context: ./node
     container_name: app
+    hostname: app
     networks: 
       - node-network
     volumes: 
