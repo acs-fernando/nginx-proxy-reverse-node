@@ -4,13 +4,18 @@ services:
 
   app:
     build: 
-      context: ./node
+      context: node
     container_name: app
     hostname: app
+    entrypoint: dockerize -wait tcp://db:3306 -timeout 20s sh -c "npm install && node index.js"
+    restart: always
+    tty: true
+    ports:
+      - "3000:3000"
     networks: 
       - node-network
-    volumes: 
-      - ./node:/usr/src/app
+    volumes:
+      - ./node:/app
     depends_on: 
        - db
 
@@ -30,8 +35,7 @@ services:
   
   nginx:
     build: 
-      context: ./nginx
-    image: acassiofs/nginx:prod
+      context: nginx
     container_name: nginx
     networks: 
       - node-network
